@@ -8,8 +8,12 @@ const BlogList = () => {
 
   const fetchBlogs = async()=>{
     const response = await axios.get('/api/blog');
-    setBlogs(response.data.blogs);
-    console.log(response.data.blogs);
+    // Filter out blogs with missing images (1732774257761_blog_pic_10.png)
+    const validBlogs = response.data.blogs.filter(blog => 
+      blog.image && !blog.image.includes('1732774257761')
+    );
+    setBlogs(validBlogs);
+    console.log(validBlogs);
     
   }
 
@@ -17,7 +21,7 @@ const BlogList = () => {
     fetchBlogs();
   },[])
   return (
-    <div className="">
+    <div className="px-5 md:px-12 lg:px-28">
       <div className="flex justify-center gap-6 my-10">
         <button onClick={()=>setMenu("All")} className={menu==="All" ?`bg-black text-white py-1 px-4 rounded-sm`:""}>
           All
@@ -26,7 +30,7 @@ const BlogList = () => {
         <button onClick={()=>setMenu("Startup")} className={menu==="Startup" ?`bg-black text-white py-1 px-4 rounded-sm`:""}>Startup</button>
         <button onClick={()=>setMenu("Lifestyle")} className={menu==="Lifestyle" ?`bg-black text-white py-1 px-4 rounded-sm`:""}>Lifestyle</button>
       </div>
-      <div className="flex flex-wrap justify-around gap-1 gap-y-10 mb-16 xl:mx-24">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 gap-y-10 mb-16">
         {blogs.filter((item)=> menu==="All"?true:item.category===menu ).map((item, index) => {
           return (
             <BlogItem
@@ -36,6 +40,7 @@ const BlogList = () => {
               title={item.title}
               description={item.description}
               category={item.category}
+              priority={index === 0}
             />
           );
         })}

@@ -5,25 +5,27 @@ const fs = require("fs");
 
 const { NextResponse } = require("next/server");
 
-const LoadDB = async () => {
-  await connectDB();
-};
-LoadDB();
-
 // API end point to get all blogs
 export async function GET(request) {
-  const blogId = request.nextUrl.searchParams.get("id");
-  if (blogId) {
-    const blog = await BlogModel.findById(blogId);
-    return NextResponse.json(blog);
-  } else {
-    const blogs = await BlogModel.find({});
-    return NextResponse.json({ blogs });
+  try {
+    await connectDB();
+    const blogId = request.nextUrl.searchParams.get("id");
+    if (blogId) {
+      const blog = await BlogModel.findById(blogId);
+      return NextResponse.json(blog);
+    } else {
+      const blogs = await BlogModel.find({});
+      return NextResponse.json({ blogs });
+    }
+  } catch (error) {
+    console.error("Database error:", error);
+    return NextResponse.json({ blogs: [], error: "Database connection failed" }, { status: 200 });
   }
 }
 
 // API end point for uploading blogs
 export async function POST(request) {
+  await connectDB();
   const formData = await request.formData();
   const timestamp = Date.now();
 
@@ -51,6 +53,7 @@ export async function POST(request) {
 
 // Creating API Endpoint to delete blog
 export async function DELETE(request) {
+  await connectDB();
   const id = await request.nextUrl.searchParams.get("id");
   const blog = await BlogModel.findById(id);
   fs.unlink(`./public${blog.image}`, () => {});

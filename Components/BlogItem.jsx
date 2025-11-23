@@ -3,16 +3,17 @@ import Image from "next/image";
 import { assets } from "@/Assets/assets";
 import Link from "next/link";
 
-const BlogItem = ({ title, description, category, image, id }) => {
+const BlogItem = ({ title, description, category, image, id, priority = false }) => {
   return (
-    <div className="max-w-[330px] sm:max-w-[300px] bg-white border border-black hover:shadow-[-7px_7px_0px_#000000]">
+    <div className="max-w-[330px] sm:max-w-full bg-white border border-black hover:shadow-[-7px_7px_0px_#000000]">
       <Link href={`/blogs/${id}`}>
         <Image
-          className="border-b border-black"
+          className="border-b border-black w-full h-auto"
           src={image}
-          alt=""
+          alt={title}
           width={400}
           height={400}
+          priority={priority}
         />
       </Link>
       <p className="ml-5 mt-5 px-1 inline-block bg-black text-white text-sm">
