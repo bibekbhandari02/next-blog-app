@@ -7,14 +7,18 @@ const BlogList = () => {
   const [blogs, setBlogs] = useState([]);
 
   const fetchBlogs = async()=>{
-    const response = await axios.get('/api/blog');
-    // Filter out blogs with missing images (1732774257761_blog_pic_10.png)
-    const validBlogs = response.data.blogs.filter(blog => 
-      blog.image && !blog.image.includes('1732774257761')
-    );
-    setBlogs(validBlogs);
-    console.log(validBlogs);
-    
+    try {
+      const response = await axios.get('/api/blog');
+      console.log('API Response:', response.data);
+      // Filter out blogs with missing images (1732774257761_blog_pic_10.png)
+      const validBlogs = response.data.blogs?.filter(blog => 
+        blog.image && !blog.image.includes('1732774257761')
+      ) || [];
+      setBlogs(validBlogs);
+      console.log('Valid Blogs:', validBlogs);
+    } catch (error) {
+      console.error('Error fetching blogs:', error);
+    }
   }
 
   useEffect(()=>{
@@ -30,7 +34,7 @@ const BlogList = () => {
         <button onClick={()=>setMenu("Startup")} className={menu==="Startup" ?`bg-black text-white py-1 px-4 rounded-sm`:""}>Startup</button>
         <button onClick={()=>setMenu("Lifestyle")} className={menu==="Lifestyle" ?`bg-black text-white py-1 px-4 rounded-sm`:""}>Lifestyle</button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 gap-y-10 mb-16">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 gap-y-10 mb-16 justify-items-center">
         {blogs.filter((item)=> menu==="All"?true:item.category===menu ).map((item, index) => {
           return (
             <BlogItem

@@ -25,6 +25,12 @@ const Page = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div className="flex justify-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
         <h1 className="text-3xl font-bold text-center mb-6">Admin Login</h1>
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
@@ -56,11 +62,6 @@ const Page = () => {
             Login
           </button>
         </form>
-        <div className="mt-4 text-center text-sm text-gray-600">
-          <p>Demo credentials:</p>
-          <p>Email: admin@blog.com</p>
-          <p>Password: admin123</p>
-        </div>
       </div>
     </div>
   );
